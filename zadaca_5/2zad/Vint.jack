@@ -1,0 +1,169 @@
+class Vint
+{
+    field int capacity;
+    field Array vector;
+
+    method int TwoToN(int n)
+    {
+        var int res, i;
+        let res = 1;
+        while (i < n)
+        {
+            let res = res * 2;
+            let i = i + 1;
+        }
+
+        return res;
+    }
+
+    method Array getVector()
+    {
+        return vector;
+    }
+
+    method void Vprint()
+    {
+        var int i;
+        while(i < capacity)
+        {
+            do Output.printInt(vector[i]);
+            do Output.printString(" ");
+            let i = i + 1;
+        }
+
+        do Output.println();
+
+        return;
+    }
+
+    method int len()
+    {
+        return capacity;
+    }
+
+    constructor Vint new(int n)
+    {
+        if(n < 0)
+        {
+            let capacity = 1;
+            let vector = Array.new(1);
+            return this;
+        }
+
+        let capacity = TwoToN(n);
+        let vector = Array.new(capacity);
+        return this;
+    }
+
+    method void set(int k, int v)
+    {
+        if ((k < capacity) & (k > -1))
+        {
+            let vector[k] = v;
+            return;
+        }
+
+        do Output.printString("Cannot set key, key to small or large.");
+        do Output.println();
+
+        return;
+    }
+
+    method int get(int k)
+    {  
+        if ((k < capacity) & (k > -1))
+        {
+            return vector[k];
+        }
+        
+        do Output.printString("Cannot get key, key to small or large.");
+        do Output.println();
+
+        return -1;   
+    }
+
+    method void resize(int m)
+    {
+        var int mini, i;
+        var Array tempArray;
+
+        if(m < 0)
+        {
+            do vector.dispose();
+            let capacity = 1;
+            let vector = Array.new(1);
+            return;
+        }
+
+        let mini = Math.min(TwoToN(m), capacity);
+
+        let tempArray = Array.new(TwoToN(m));
+
+        while (i < mini)
+        {
+            let tempArray[i] = vector[i];
+            let i = i + 1;
+        }
+
+        do vector.dispose();
+        let capacity = TwoToN(m);
+        let vector = tempArray;        
+        return;
+    }
+
+    function bool is_eq(Vint a, Vint b)
+    {
+        var int i;
+        
+        if (~(a.len() = b.len()))
+        {
+            return false;
+        }
+
+        while(i < a.len())
+        {
+            if (~(a.get(i) = b.get(i)))
+            {
+                return false;
+            }
+            let i = i + 1;
+        }
+
+        return true;
+
+    }   
+
+    function bool elems (Vint a, Vint b)
+    {
+        var Array arrA, arrB;
+        var int lenA, lenB, i;
+        
+        let lenA = a.len();
+        let lenB = b.len();
+
+        if (lenA = lenB)
+        {
+            let arrA = a.getVector();
+            let arrB = b.getVector();
+
+            do QuickSort.qSort(arrA, 0, a.len() - 1);
+            do QuickSort.qSort(arrB, 0, b.len() - 1);
+
+            while(i < lenA)
+            {
+                if (~(arrA[i] = arrB[i]))
+                {
+                    return false;
+                }
+
+                let i = i + 1;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+
+}
